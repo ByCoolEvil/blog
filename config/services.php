@@ -44,4 +44,9 @@ return [
         ],
     ],
 
+    //高德地图
+    'gaode' => [
+        'ws_api_key' => env('GAODE_MAPS_WS_API_KEY'),
+    ]
+
 ];
