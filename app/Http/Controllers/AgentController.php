@@ -21,7 +21,31 @@ class AgentController extends Controller
     public function user_list()
     {
         $user_info = DB::connection('mysql_myshop')->table('user_code')->get();
-        return view('Agent.userList',['user_info'=>$user_info]);
+//        dd($user_info);
+//        计算签名
+        $jsconfig = [
+            'appid' => env('WECHAT_APPID'), //appid
+            'timestamp' => time(),
+            'noncestr' => time().rand(111111,999999).'suibian',
+        ];
+        $sign = $this->wxJsConfigSign($jsconfig);
+        $jsconfig['sign'] = $sign;
+//        当前请求的 Host 头部的内容
+        $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        return view('Agent.userList',['user_info'=>$user_info,'url'=>$url,'jsconfig'=>$jsconfig]);
+    }
+    /**
+     * 计算 JSSDK Sign
+     */
+    public function wxJsConfigSign($param)
+    {
+        $current_url = 'http://'.$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; //当前调用 jsapi的uri
+        $ticket = $this->wechat->jsapi_ticket();
+        //签名算法
+        //需要sha1() 加密   string  'jsapi_ticket=value&noncestr=value&timestamp=value&url=value'
+        $str =  'jsapi_ticket='.$ticket.'&noncestr='.$param['noncestr'].'&timestamp='.$param['timestamp'].'&url='.$current_url;
+        $signature=sha1($str);
+        return $signature;
     }
     /**
      * 生成专属二维码

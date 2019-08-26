@@ -135,6 +135,7 @@ Route::any('/wechat/event','WechatController@event');//接收公众号事件
 //公众号二维码
 Route::get('/agent/user_list','AgentController@user_list');//微信添加标签
 Route::get('/agent/create_qrcode','AgentController@create_qrcode');//生成专属二维码
+Route::post('/agent/signature','AgentController@signature');  //分享签名
 Route::get('/agent/agent_list','AgentController@agent_list');//用户列表
 //用户标签相关
 Route::get('/wechat/update_tag','WechatController@update_tag'); //修改标签
@@ -179,6 +180,10 @@ Route::get('liuyan/wechat_code','LiuYanController@wechat_code');//接收code
 Route::get('liuyan/login','LiuYanController@login');//页面登录
 Route::post('liuyan/do_login','LiuYanController@do_login');//执行页面登录
 Route::get('liuyan/do_del','LiuYanController@do_del');//删除留言
+//月考表白
+Route::get('/biaobai/index','BiaoBaiController@index');
+Route::get('/biaobai/send','BiaoBaiController@send');
+Route::post('/biaobai/do_send','BiaoBaiController@do_send');
 
 //调用中间件
 Route::group(['middleware'=>['update']],function(){ 
